@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Navbar1 } from "@/components/layouts/navbar1";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
 // import { Toaster } from "sonner";
@@ -38,7 +37,6 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Navbar1></Navbar1>
             {children}
             <Toaster richColors />
           </ThemeProvider>

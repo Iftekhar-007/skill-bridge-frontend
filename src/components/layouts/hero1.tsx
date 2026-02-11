@@ -28,17 +28,17 @@ interface Hero1Props {
 }
 
 const Hero1 = ({
-  badge = "Your Website",
+  badge = "",
   heading = "Hi",
   description = "dgdfgsdgsdf",
   buttons = {
     primary: {
       text: "Discover all Tutors",
-      url: "#",
+      url: "/tutors",
     },
     secondary: {
       text: "View all Categories",
-      url: "#",
+      url: "/categories",
     },
   },
   image = {
@@ -48,7 +48,7 @@ const Hero1 = ({
   className,
 }: Hero1Props) => {
   return (
-    <section className={cn("mt-10", className)}>
+    <section className={cn("py-10", className)}>
       <div className="container shadow-sm p-10 rounded-lg">
         <div className="grid items-center gap-6 lg:grid-cols-2 lg:gap-12">
           <div className="gap-5 flex flex-col items-center text-center lg:items-start lg:text-left">

@@ -61,24 +61,24 @@ interface Navbar1Props {
 
 const Navbar1 = ({
   logo = {
-    url: "https://www.shadcnblocks.com",
+    url: "/",
     src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/shadcnblockscom-icon.svg",
     alt: "logo",
     title: "Skill Bridge",
   },
   menu = [
-    { title: "Home", url: "#" },
+    { title: "Home", url: "/" },
     {
-      title: "Pricing",
-      url: "#",
+      title: "Tutors",
+      url: "/tutors",
     },
     {
-      title: "Blog",
-      url: "#",
+      title: "Categories",
+      url: "/categories",
     },
     {
       title: "Dashboard",
-      url: "#",
+      url: "/dashboard",
     },
   ],
   auth = {
