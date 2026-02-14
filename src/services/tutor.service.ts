@@ -2,10 +2,41 @@ import { env } from "@/env";
 
 const TutorApi = env.TUTOR_URL;
 
+export interface fetchInter {
+  cache?: RequestCache;
+  revalidate?: number;
+}
+
+export interface fetchParams {
+  search?: "";
+  expertise?: string[] | [];
+  rating?: number | undefined;
+}
+
 export const tutorServices = {
-  getTutors: async function () {
+  getTutors: async function (params?: fetchParams, options?: fetchInter) {
     try {
       const url = new URL(`${TutorApi}/tutors`);
+
+      if (params) {
+        Object.entries(params).forEach(([key, value]) => {
+          if (value !== undefined && value !== null && value !== "") {
+            url.searchParams.append(key, value);
+          }
+        });
+      }
+
+      const config: RequestInit = {};
+
+      if (options?.cache) {
+        config.cache = options.cache;
+      }
+
+      if (options?.revalidate) {
+        config.next = { revalidate: options.revalidate };
+      }
+
+      config.next = { ...config.next, tags: ["tutors"] };
 
       const res = await fetch(url.toString());
 
