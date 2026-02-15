@@ -1,80 +1,3 @@
-// import { Button } from "@/components/ui/button"
-// import {
-//   Card,
-//   CardContent,
-//   CardDescription,
-//   CardHeader,
-//   CardTitle,
-// } from "@/components/ui/card"
-// import {
-//   Field,
-//   FieldDescription,
-//   FieldGroup,
-//   FieldLabel,
-// } from "@/components/ui/field"
-// import { Input } from "@/components/ui/input"
-
-// export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
-//   return (
-//     <Card {...props}>
-//       <CardHeader>
-//         <CardTitle>Create an account</CardTitle>
-//         <CardDescription>
-//           Enter your information below to create your account
-//         </CardDescription>
-//       </CardHeader>
-//       <CardContent>
-//         <form>
-//           <FieldGroup>
-//             <Field>
-//               <FieldLabel htmlFor="name">Full Name</FieldLabel>
-//               <Input id="name" type="text" placeholder="John Doe" required />
-//             </Field>
-//             <Field>
-//               <FieldLabel htmlFor="email">Email</FieldLabel>
-//               <Input
-//                 id="email"
-//                 type="email"
-//                 placeholder="m@example.com"
-//                 required
-//               />
-//               <FieldDescription>
-//                 We&apos;ll use this to contact you. We will not share your email
-//                 with anyone else.
-//               </FieldDescription>
-//             </Field>
-//             <Field>
-//               <FieldLabel htmlFor="password">Password</FieldLabel>
-//               <Input id="password" type="password" required />
-//               <FieldDescription>
-//                 Must be at least 8 characters long.
-//               </FieldDescription>
-//             </Field>
-//             <Field>
-//               <FieldLabel htmlFor="confirm-password">
-//                 Confirm Password
-//               </FieldLabel>
-//               <Input id="confirm-password" type="password" required />
-//               <FieldDescription>Please confirm your password.</FieldDescription>
-//             </Field>
-//             <FieldGroup>
-//               <Field>
-//                 <Button type="submit">Create Account</Button>
-//                 <Button variant="outline" type="button">
-//                   Sign up with Google
-//                 </Button>
-//                 <FieldDescription className="px-6 text-center">
-//                   Already have an account? <a href="#">Sign in</a>
-//                 </FieldDescription>
-//               </Field>
-//             </FieldGroup>
-//           </FieldGroup>
-//         </form>
-//       </CardContent>
-//     </Card>
-//   )
-// }
-
 "use client";
 
 import { cn } from "@/lib/utils";
@@ -82,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -99,7 +21,16 @@ import { useForm } from "@tanstack/react-form";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
 
+// const formSchema = z.object({
+//   name: z.string().min(1, "Name is required!"),
+//   email: z.email(),
+//   password: z.string().min(6, "Password required and at least 6 characters"),
+// });
+
 const formSchema = z.object({
+  role: z.enum(["STUDENT", "TUTOR"], {
+    error: "Please select a role",
+  }),
   name: z.string().min(1, "Name is required!"),
   email: z.email(),
   password: z.string().min(6, "Password required and at least 6 characters"),
@@ -110,12 +41,29 @@ export function SignupForm({
   ...props
 }: React.ComponentProps<"div">) {
   const form = useForm({
-    defaultValues: { name: "", email: "", password: "" },
+    // defaultValues: { name: "", email: "", password: "" },
+    defaultValues: {
+      role: "STUDENT",
+      name: "",
+      email: "",
+      password: "",
+    },
+
     validators: { onSubmit: formSchema },
     onSubmit: async ({ value }) => {
       const toastId = toast.loading("User creating");
       try {
+        // const { data, error } = await authClient.signUp.email(value);
+
+        // {
+        //   name: value.name,
+        //   email: value.email,
+        //   password: value.password,
+        //   role: value.role, // ✅ add this
+        // }
+
         const { data, error } = await authClient.signUp.email(value);
+
         if (error) {
           toast.error(error.message, { id: toastId });
           return;
@@ -135,10 +83,7 @@ export function SignupForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
-          <CardDescription>
-            Enter your email below to login to your account
-          </CardDescription>
+          <CardTitle>Create your account</CardTitle>
         </CardHeader>
         <CardContent>
           <form
@@ -149,6 +94,50 @@ export function SignupForm({
             }}
           >
             <FieldGroup>
+              <form.Field name="role">
+                {(field) => {
+                  return (
+                    <Field>
+                      <FieldLabel>Select Role</FieldLabel>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        {/* Student */}
+                        <Card
+                          onClick={() => field.handleChange("STUDENT")}
+                          className={cn(
+                            "cursor-pointer border-2",
+                            field.state.value === "STUDENT"
+                              ? "border-primary"
+                              : "border-muted",
+                          )}
+                        >
+                          <CardContent className="flex flex-col items-center p-4">
+                            🎓
+                            <p>Student</p>
+                          </CardContent>
+                        </Card>
+
+                        {/* Tutor */}
+                        <Card
+                          onClick={() => field.handleChange("TUTOR")}
+                          className={cn(
+                            "cursor-pointer border-2",
+                            field.state.value === "TUTOR"
+                              ? "border-primary"
+                              : "border-muted",
+                          )}
+                        >
+                          <CardContent className="flex flex-col items-center p-4">
+                            👨‍🏫
+                            <p>Tutor</p>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    </Field>
+                  );
+                }}
+              </form.Field>
+
               <form.Field name="name">
                 {(field) => {
                   const isInvalid =
@@ -229,7 +218,7 @@ export function SignupForm({
 
         <CardFooter>
           <Button className="w-full" form="login-form" type="submit">
-            Log In
+            Sign Up
           </Button>
         </CardFooter>
       </Card>
