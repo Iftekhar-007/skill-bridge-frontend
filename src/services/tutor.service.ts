@@ -38,6 +38,24 @@ export const tutorServices = {
 
       config.next = { ...config.next, tags: ["tutors"] };
 
+      const res = await fetch(url.toString(), config);
+
+      const data = await res.json();
+
+      return { data: data, error: null };
+    } catch (err) {
+      return {
+        data: null,
+        error: { message: "Something went wrong!!!!" },
+        err,
+      };
+    }
+  },
+
+  getSingleTutor: async function (id: string) {
+    try {
+      const url = new URL(`${TutorApi}/${id}`);
+
       const res = await fetch(url.toString());
 
       const data = await res.json();
