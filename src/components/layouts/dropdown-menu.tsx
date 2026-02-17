@@ -1,3 +1,6 @@
+"use client";
+
+import { authClient } from "@/lib/auth-client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,41 +11,72 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  BadgeCheckIcon,
-  BellIcon,
-  CreditCardIcon,
-  LogOutIcon,
-} from "lucide-react";
 
-export function DropdownMenuAvatar() {
+import { BellIcon, LogOutIcon } from "lucide-react";
+
+import { toast } from "sonner";
+import Link from "next/link";
+
+// interface User {
+//   image?: string;
+//   name?: string;
+// }
+
+type User = {
+  name: string;
+  email: string;
+  image?: string | null; // ✅ allow null
+};
+
+export function DropdownMenuAvatar({ user }: { user: User }) {
+  const handleLogout = async () => {
+    const toastId = toast.loading("Signing out...");
+
+    const { error } = await authClient.signOut();
+
+    if (error) {
+      toast.error(error.message, { id: toastId });
+      return;
+    }
+
+    toast.success("Signed out successfully", { id: toastId });
+
+    // optional redirect
+    window.location.href = "/";
+  };
+
+  const getInitials = (name?: string) => {
+    if (!name) return "U";
+    return name
+      .split(" ")
+      .map((word) => word[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase();
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="rounded-full">
           <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" alt="shadcn" />
-            <AvatarFallback>LR</AvatarFallback>
+            {user?.image && <AvatarImage src={user.image} alt={user.name} />}
+            <AvatarFallback>{getInitials(user?.name)}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
+
       <DropdownMenuContent align="end">
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <BadgeCheckIcon />
-            Account
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <CreditCardIcon />
-            Billing
-          </DropdownMenuItem>
-          <DropdownMenuItem>
             <BellIcon />
-            Notifications
+            <Link href="/dashboard">Dashboard</Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
+
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+
+        <DropdownMenuItem onClick={handleLogout}>
           <LogOutIcon />
           Sign Out
         </DropdownMenuItem>

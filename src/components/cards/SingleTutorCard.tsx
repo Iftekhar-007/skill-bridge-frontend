@@ -8,9 +8,18 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Star, Clock, DollarSign } from "lucide-react";
 
+// interface ExpertiseItem {
+//   id: string;
+//   category?: {
+//     title: string;
+//   };
+// }
+
 interface ExpertiseItem {
-  id: string;
+  tutorProfileId?: string;
+  categoryId: string;
   category?: {
+    id: string;
     title: string;
   };
 }
@@ -93,7 +102,7 @@ export default function SingleTutorCard({ tutor }: Props) {
             <div className="flex flex-wrap gap-2">
               {expertise?.map((item: ExpertiseItem) => (
                 <Badge
-                  key={item.id}
+                  key={item.categoryId} // ✅ correct unique key
                   variant="secondary"
                   className="rounded-full px-4 py-1"
                 >

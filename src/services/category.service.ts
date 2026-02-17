@@ -11,7 +11,7 @@ export const categoryService = {
 
       const data = await res.json();
 
-      console.log(data);
+      // console.log(data);
 
       return { data: data, error: null };
     } catch (err) {

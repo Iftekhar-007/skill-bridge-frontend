@@ -8,9 +8,13 @@ export interface fetchInter {
 }
 
 export interface fetchParams {
-  search?: "";
-  expertise?: string[] | [];
-  rating?: number | undefined;
+  search?: string;
+  expertise?: string;
+  rating?: number;
+  pageNumber?: number;
+  limitNumber?: number;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
 }
 
 export const tutorServices = {
@@ -21,7 +25,7 @@ export const tutorServices = {
       if (params) {
         Object.entries(params).forEach(([key, value]) => {
           if (value !== undefined && value !== null && value !== "") {
-            url.searchParams.append(key, value);
+            url.searchParams.append(key, String(value));
           }
         });
       }

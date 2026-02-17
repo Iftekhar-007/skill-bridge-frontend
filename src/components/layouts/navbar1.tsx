@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/sheet";
 import { DropdownMenuAvatar } from "./dropdown-menu";
 import { ModeToggle } from "../themeToggle/ModeToggle";
+import { authClient } from "@/lib/auth-client";
 
 interface MenuItem {
   title: string;
@@ -76,10 +77,6 @@ const Navbar1 = ({
       title: "Categories",
       url: "/categories",
     },
-    {
-      title: "Dashboard",
-      url: "/dashboard",
-    },
   ],
   auth = {
     login: { title: "Login", url: "/auth/login" },
@@ -87,6 +84,10 @@ const Navbar1 = ({
   },
   className,
 }: Navbar1Props) => {
+  const { data: session, isPending } = authClient.useSession();
+  const user = session?.user;
+
+  if (isPending) return "";
   return (
     <section className={cn("py-4", className)}>
       <div className="container max-w-9/12 mx-auto">
@@ -112,18 +113,25 @@ const Navbar1 = ({
               </NavigationMenu>
             </div>
           </div>
-          <div className="flex gap-2">
-            <div>
-              <DropdownMenuAvatar></DropdownMenuAvatar>
-            </div>
-            <Button asChild variant="outline" size="sm">
-              <a href={auth.login.url}>{auth.login.title}</a>
-            </Button>
-            <Button asChild size="sm">
-              <a href={auth.signup.url}>{auth.signup.title}</a>
-            </Button>
 
-            <ModeToggle></ModeToggle>
+          <div className="flex gap-2 items-center">
+            {/* logged in */}
+            {user && <DropdownMenuAvatar user={user} />}
+
+            {/* not logged in */}
+            {!user && (
+              <>
+                <Button asChild variant="outline" size="sm">
+                  <a href={auth.login.url}>{auth.login.title}</a>
+                </Button>
+
+                <Button asChild size="sm">
+                  <a href={auth.signup.url}>{auth.signup.title}</a>
+                </Button>
+              </>
+            )}
+
+            <ModeToggle />
           </div>
         </nav>
 

@@ -6,7 +6,7 @@ import React from "react";
 export async function generateStaticParams() {
   const { data } = await tutorServices.getTutors();
 
-  return data.data.data.map((tutor: TutorProfile) => ({ id: tutor.id }));
+  return data.data.map((tutor: TutorProfile) => ({ id: tutor.id }));
 }
 
 const SingleTutor = async ({ params }: { params: Promise<{ id: string }> }) => {
