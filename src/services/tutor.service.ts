@@ -68,7 +68,7 @@ export const tutorServices = {
     } catch (err) {
       return {
         data: null,
-        error: { message: "Something went wrong!!!!" },
+        error: { message: "Something went wrong!!" },
         err,
       };
     }

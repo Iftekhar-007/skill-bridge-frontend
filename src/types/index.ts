@@ -4,3 +4,4 @@ export type * from "./reviews.type";
 export type * from "./studentProfile.type";
 export type * from "./tutor.type";
 export type * from "./tutorcategories.type";
+export type * from "./routes.type";
