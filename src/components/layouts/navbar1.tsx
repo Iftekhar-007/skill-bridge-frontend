@@ -29,6 +29,7 @@ import {
 import { DropdownMenuAvatar } from "./dropdown-menu";
 import { ModeToggle } from "../themeToggle/ModeToggle";
 import { authClient } from "@/lib/auth-client";
+import { Spinner } from "../ui/spinner";
 
 interface MenuItem {
   title: string;
@@ -87,7 +88,7 @@ const Navbar1 = ({
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
 
-  if (isPending) return "";
+  // if (isPending) return "";
   return (
     <section className={cn("py-4", className)}>
       <div className="container max-w-9/12 mx-auto">
@@ -115,11 +116,18 @@ const Navbar1 = ({
           </div>
 
           <div className="flex gap-2 items-center">
-            {/* logged in */}
-            {user && <DropdownMenuAvatar user={user} />}
+            {/* Loading state */}
+            {isPending && (
+              <div className="h-9 w-9 flex items-center justify-center">
+                <Spinner />
+              </div>
+            )}
 
-            {/* not logged in */}
-            {!user && (
+            {/* Logged in */}
+            {!isPending && user && <DropdownMenuAvatar user={user} />}
+
+            {/* Not logged in */}
+            {!isPending && !user && (
               <>
                 <Button asChild variant="outline" size="sm">
                   <a href={auth.login.url}>{auth.login.title}</a>

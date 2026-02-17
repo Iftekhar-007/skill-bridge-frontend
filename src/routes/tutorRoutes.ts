@@ -9,6 +9,18 @@ export const tutorRoutes: Route[] = [
         url: "#",
         // isActive: true,
       },
+      {
+        title: "Create Profile",
+        url: "#",
+      },
+      {
+        title: "Bookings",
+        url: "#",
+      },
+      {
+        title: "Slots",
+        url: "#",
+      },
     ],
   },
 ];

@@ -21,6 +21,7 @@ import * as z from "zod";
 import { useForm } from "@tanstack/react-form";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.email(),
@@ -31,6 +32,7 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const router = useRouter();
   const form = useForm({
     defaultValues: { email: "", password: "" },
     validators: { onSubmit: formSchema },
@@ -42,9 +44,13 @@ export function LoginForm({
           toast.error(error.message, { id: toastId });
           return;
         }
-        toast.success("user ccreated successfully", { id: toastId });
+        toast.success("user logged in successfully", { id: toastId });
         form.reset();
-        console.log(data, value);
+
+        router.push("/dashboard");
+
+        router.refresh();
+        // console.log(data, value);
       } catch (err: unknown) {
         toast.error(err instanceof Error ? err.message : "An error occurred");
       }
