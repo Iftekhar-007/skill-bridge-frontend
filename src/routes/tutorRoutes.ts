@@ -11,7 +11,7 @@ export const tutorRoutes: Route[] = [
       },
       {
         title: "Create Profile",
-        url: "#",
+        url: "/tutor-dashboard/create-profile",
       },
       {
         title: "Bookings",
