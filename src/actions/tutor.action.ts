@@ -1,17 +1,11 @@
 "use server";
 
-import { cookies } from "next/headers";
 import { env } from "@/env";
-
-import { tutorServices } from "@/services/tutor.service";
-
-export const getTutors = async () => {
-  return await tutorServices.getTutors();
-};
+import { updateTag } from "next/cache";
+import { cookies } from "next/headers";
 
 const TUTOR_URL = env.TUTOR_URL;
-
-export async function createTutor(prevState: unknown, formData: FormData) {
+export const createTutor = async (prevState: unknown, formData: FormData) => {
   try {
     const bio = formData.get("bio") as string;
     const hourlyRate = Number(formData.get("hourlyRate"));
@@ -41,14 +35,13 @@ export async function createTutor(prevState: unknown, formData: FormData) {
       body: JSON.stringify(tutorData),
     });
 
-    const data = await res.json();
+    const result = await res.json();
 
     if (!res.ok) {
-      return {
-        success: false,
-        message: data?.message || "Failed to create tutor profile",
-      };
+      return { success: false, message: result.message };
     }
+
+    updateTag("tutors");
 
     return {
       success: true,
@@ -57,7 +50,7 @@ export async function createTutor(prevState: unknown, formData: FormData) {
   } catch (error: unknown) {
     return {
       success: false,
-      message: error instanceof Error ? error.message : "An error occurred",
+      message: error instanceof Error ? error.message : String(error),
     };
   }
-}
+};

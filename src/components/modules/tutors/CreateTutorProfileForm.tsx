@@ -1,4 +1,8 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
+import { useActionState, useEffect } from "react";
+
 import {
   Card,
   CardContent,
@@ -10,11 +14,9 @@ import {
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { env } from "@/env";
-import { revalidateTag, updateTag } from "next/cache";
-import { cookies } from "next/headers";
 
-const TUTOR_URL = env.TUTOR_URL;
+import { createTutor } from "@/actions/tutor.action";
+import { toast } from "sonner";
 
 interface Category {
   id: string;
@@ -26,50 +28,21 @@ interface Props {
 }
 
 export default function CreateTutorProfileForm({ categories }: Props) {
-  const createTutor = async (formData: FormData) => {
-    "use server";
+  const [state, formAction, isPending] = useActionState(createTutor, null);
 
-    const bio = formData.get("bio") as string;
-    const hourlyRate = Number(formData.get("hourlyRate"));
-    const startTime = formData.get("startTime") as string;
-    const endTime = formData.get("endTime") as string;
+  useEffect(() => {
+    if (!state) return;
 
-    const categoryIds = formData
-      .getAll("categoryIds")
-      .map((id) => id.toString());
-
-    const tutorData = {
-      bio,
-      hourlyRate,
-      startTime,
-      endTime,
-      categoryIds,
-    };
-
-    const cookieStore = await cookies();
-
-    const res = await fetch(`${TUTOR_URL}/create-tutor`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Cookie: cookieStore.toString(),
-      },
-      body: JSON.stringify(tutorData),
-    });
-
-    if (res.ok) {
-      //   revalidateTag("tutors", "max");
-      updateTag("tutors");
+    if (state.success) {
+      toast.success(state.message);
+    } else {
+      toast.error(state.message);
     }
-
-    if (!res.ok) {
-      throw new Error("Failed to create tutor profile");
-    }
-  };
+  }, [state]);
 
   return (
     <div>
-      <Card className="max-w-3xl mx-auto">
+      <Card className="max-w-9xl mx-auto">
         <CardHeader>
           <CardTitle>Create Tutor Profile</CardTitle>
           <CardDescription>
@@ -78,7 +51,7 @@ export default function CreateTutorProfileForm({ categories }: Props) {
         </CardHeader>
 
         <CardContent>
-          <form id="tutor-form" action={createTutor}>
+          <form id="tutor-form" action={formAction}>
             <FieldGroup>
               {/* Bio */}
               <Field>
@@ -138,8 +111,13 @@ export default function CreateTutorProfileForm({ categories }: Props) {
         </CardContent>
 
         <CardFooter>
-          <Button type="submit" form="tutor-form" className="w-full">
-            Create Tutor Profile
+          <Button
+            type="submit"
+            form="tutor-form"
+            className="w-full"
+            disabled={isPending}
+          >
+            {isPending ? "Creating..." : "Create Tutor Profile"}
           </Button>
         </CardFooter>
       </Card>

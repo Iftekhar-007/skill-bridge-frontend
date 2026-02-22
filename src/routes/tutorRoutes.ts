@@ -6,7 +6,7 @@ export const tutorRoutes: Route[] = [
     items: [
       {
         title: "Profile",
-        url: "#",
+        url: "/tutor-dashboard/my-tutor-profile",
         // isActive: true,
       },
       {
@@ -15,7 +15,7 @@ export const tutorRoutes: Route[] = [
       },
       {
         title: "Bookings",
-        url: "#",
+        url: "/tutor-dashboard/my-bookings",
       },
       {
         title: "Slots",

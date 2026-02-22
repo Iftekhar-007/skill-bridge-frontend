@@ -10,11 +10,11 @@ export const studentRoutes: Route[] = [
       },
       {
         title: "Create Profile",
-        url: "#",
+        url: "/dashboard/create-student",
       },
       {
         title: "My Bookings",
-        url: "#",
+        url: "/dashboard/my-bookings",
       },
     ],
   },

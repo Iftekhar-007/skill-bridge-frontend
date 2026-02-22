@@ -1,4 +1,4 @@
-import CategoryCard from "@/components/cards/CategoryCard";
+import { CategoryCard } from "@/components/cards/CategoryCard";
 import { categoryService } from "@/services/category.service";
 import { Categories } from "@/types";
 // import React from "react";

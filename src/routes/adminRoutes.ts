@@ -6,23 +6,15 @@ export const adminRoutes: Route[] = [
     items: [
       {
         title: "All User",
-        url: "#",
-      },
-      {
-        title: "All Tutor",
-        url: "#",
+        url: "/admin-dashboard/all-user",
       },
       {
         title: "Create Category",
-        url: "#",
-      },
-      {
-        title: "All Category",
-        url: "#",
+        url: "/admin-dashboard/create-category",
       },
       {
         title: "All Bookings",
-        url: "#",
+        url: "/admin-dashboard/all-bookings",
       },
     ],
   },

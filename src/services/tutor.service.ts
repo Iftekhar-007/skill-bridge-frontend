@@ -1,4 +1,5 @@
 import { env } from "@/env";
+import { cookies } from "next/headers";
 
 const TutorApi = env.TUTOR_URL;
 
@@ -71,6 +72,38 @@ export const tutorServices = {
         error: { message: "Something went wrong!!" },
         err,
       };
+    }
+  },
+
+  // services/tutor.service.ts
+  // import { env } from "@/env";
+
+  // const TutorApi = env.TUTOR_URL;
+
+  getMyTutorProfile: async function () {
+    try {
+      const url = new URL(`${TutorApi}/my-tutor-profile`);
+
+      // Forward auth cookies from the current Next.js request to the backend
+      const cookieStore = await cookies();
+      const cookieHeader = cookieStore
+        .getAll()
+        .map((c) => `${c.name}=${c.value}`)
+        .join("; ");
+
+      const res = await fetch(url.toString(), {
+        cache: "no-store",
+        headers: cookieHeader ? { cookie: cookieHeader } : undefined,
+      });
+
+      if (!res.ok) throw new Error("Failed to fetch profile");
+
+      const data = await res.json();
+      return { data, error: null };
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error ? err.message : "Something went wrong";
+      return { data: null, error: { message } };
     }
   },
 };
