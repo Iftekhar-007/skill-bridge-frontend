@@ -75,11 +75,6 @@ export const tutorServices = {
     }
   },
 
-  // services/tutor.service.ts
-  // import { env } from "@/env";
-
-  // const TutorApi = env.TUTOR_URL;
-
   getMyTutorProfile: async function () {
     try {
       const url = new URL(`${TutorApi}/my-tutor-profile`);

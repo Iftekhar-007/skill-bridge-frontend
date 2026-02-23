@@ -1,164 +1,3 @@
-// "use client";
-
-// import { TutorProfile } from "@/types/tutor.type";
-// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-// import { Badge } from "@/components/ui/badge";
-// import { Button } from "@/components/ui/button";
-// import { Separator } from "@/components/ui/separator";
-// import { Star, Clock, DollarSign } from "lucide-react";
-
-// import { useTransition } from "react";
-// import { toast } from "sonner";
-// import { createBookingAction } from "@/actions/booking.action";
-// // import { createBookingAction } from "@/app/actions/booking";
-
-// // interface ExpertiseItem {
-// //   id: string;
-// //   category?: {
-// //     title: string;
-// //   };
-// // }
-
-// interface ExpertiseItem {
-//   tutorProfileId?: string;
-//   categoryId: string;
-//   category?: {
-//     id: string;
-//     title: string;
-//   };
-// }
-
-// interface Props {
-//   tutor: TutorProfile;
-// }
-
-// export default function SingleTutorCard({ tutor }: Props) {
-//   const {
-//     user,
-//     availability,
-//     bio,
-//     hourlyRate,
-//     averageRating,
-//     totalStudents,
-//     startTime,
-//     endTime,
-//     expertise,
-//   } = tutor;
-
-//   const [isPending, startTransition] = useTransition();
-
-//   const handleBooking = () => {
-//     startTransition(async () => {
-//       try {
-//         await createBookingAction({
-//           tutorId: tutor.id,
-//           date: new Date(),
-//           startTime: new Date(startTime),
-//           endTime: new Date(endTime),
-//           price: hourlyRate,
-//         });
-
-//         toast.success("Session booked successfully 🎉");
-//       } catch (err) {
-//         const errorMessage =
-//           err instanceof Error ? err.message : "An error occurred";
-//         toast.error(errorMessage);
-//       }
-//     });
-//   };
-
-//   return (
-//     <Card className="max-w-4xl mx-auto rounded-3xl shadow-lg">
-//       <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-//         {/* Left Section */}
-//         <div className="flex items-center gap-5">
-//           <Avatar className="h-24 w-24">
-//             <AvatarImage src={user?.image || ""} />
-//             <AvatarFallback className="text-2xl">
-//               {user?.name?.charAt(0)}
-//             </AvatarFallback>
-//           </Avatar>
-
-//           <div className="space-y-2">
-//             <CardTitle className="text-2xl">{user?.name}</CardTitle>
-
-//             <Badge
-//               variant={availability === "AVAILABLE" ? "default" : "destructive"}
-//               className="rounded-full px-4 py-1"
-//             >
-//               {availability}
-//             </Badge>
-
-//             <div className="flex items-center gap-2 text-sm text-muted-foreground">
-//               <Star className="h-4 w-4 text-yellow-500" />
-//               {averageRating.toFixed(1)} • {totalStudents} students
-//             </div>
-//           </div>
-//         </div>
-
-//         {/* Right Section */}
-//         <div className="text-right space-y-2">
-//           <div className="flex items-center justify-end gap-2 text-lg font-semibold">
-//             <DollarSign className="h-5 w-5" />৳ {hourlyRate} / hour
-//           </div>
-
-//           <div className="flex items-center justify-end gap-2 text-sm text-muted-foreground">
-//             <Clock className="h-4 w-4" />
-//             {new Date(startTime).toLocaleTimeString()} -{" "}
-//             {new Date(endTime).toLocaleTimeString()}
-//           </div>
-//         </div>
-//       </CardHeader>
-
-//       <Separator />
-
-//       <CardContent className="space-y-6 pt-6">
-//         {/* Bio */}
-//         <div>
-//           <h3 className="font-semibold mb-2">About Tutor</h3>
-//           <p className="text-muted-foreground leading-relaxed">
-//             {bio || "No bio provided yet."}
-//           </p>
-//         </div>
-
-//         {/* Expertise */}
-//         {expertise && expertise.length > 0 && (
-//           <div>
-//             <h3 className="font-semibold mb-3">Expertise</h3>
-//             <div className="flex flex-wrap gap-2">
-//               {expertise?.map((item: ExpertiseItem) => (
-//                 <Badge
-//                   key={item.categoryId} // ✅ correct unique key
-//                   variant="secondary"
-//                   className="rounded-full px-4 py-1"
-//                 >
-//                   {item.category?.title}
-//                 </Badge>
-//               ))}
-//             </div>
-//           </div>
-//         )}
-
-//         {/* CTA */}
-//         <div className="pt-4">
-//           {/* <Button className="w-full rounded-2xl text-base py-6">
-//             Book Session
-//           </Button> */}
-
-//           <Button
-//             onClick={handleBooking}
-//             disabled={isPending || tutor.availability !== "AVAILABLE"}
-//             className="w-full rounded-2xl text-base py-6"
-//           >
-//             {isPending ? "Booking..." : "Book Session"}
-//           </Button>
-//         </div>
-//       </CardContent>
-//     </Card>
-//   );
-// }
-
 "use client";
 
 import { TutorProfile } from "@/types/tutor.type";
@@ -206,6 +45,7 @@ export default function SingleTutorCard({ tutor }: Props) {
     startTime,
     endTime,
     expertise,
+    reviews,
   } = tutor;
 
   const [isPending, startTransition] = useTransition();
@@ -332,15 +172,16 @@ export default function SingleTutorCard({ tutor }: Props) {
                 <div className="flex items-center gap-1.5 text-sm">
                   <Clock className="w-4 h-4 text-violet-500" />
                   <span className="font-semibold">
-                    {new Date(startTime).toLocaleTimeString([], {
+                    {/* {new Date(startTime).toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit",
-                    })}{" "}
-                    –{" "}
-                    {new Date(endTime).toLocaleTimeString([], {
+                    })}{" "} */}
+                    {startTime}–{" "}
+                    {/* {new Date(endTime).toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit",
-                    })}
+                    })} */}
+                    {endTime}
                   </span>
                   <span className="text-muted-foreground">Session hours</span>
                 </div>
@@ -383,6 +224,85 @@ export default function SingleTutorCard({ tutor }: Props) {
                   </Badge>
                 ))}
               </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* ── Reviews ── */}
+        {reviews && reviews.length > 0 && (
+          <Card className="border shadow-sm">
+            <CardContent className="p-6 space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 font-semibold text-base">
+                  <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+                  Reviews
+                  <span className="text-sm font-normal text-muted-foreground">
+                    ({reviews.length})
+                  </span>
+                </div>
+                <span className="text-sm font-semibold text-indigo-600">
+                  {averageRating.toFixed(1)} avg
+                </span>
+              </div>
+              <Separator />
+
+              <div className="space-y-4 pt-1">
+                {reviews.map((review) => (
+                  <div key={review.id} className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-400 to-indigo-500 flex items-center justify-center shrink-0">
+                          <span className="text-white text-xs font-bold">
+                            {review.student?.user?.name?.charAt(0) ?? "S"}
+                          </span>
+                        </div>
+                        <p className="text-sm font-semibold text-foreground">
+                          {review.student?.user?.name ?? "Student"}
+                        </p>
+                      </div>
+
+                      {/* Stars */}
+                      <div className="flex items-center gap-0.5">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Star
+                            key={i}
+                            className="w-3.5 h-3.5"
+                            fill={
+                              i < Math.round(review.rating) ? "#f59e0b" : "none"
+                            }
+                            stroke={
+                              i < Math.round(review.rating)
+                                ? "#f59e0b"
+                                : "#cbd5e1"
+                            }
+                          />
+                        ))}
+                      </div>
+                    </div>
+
+                    <p className="text-sm text-muted-foreground leading-relaxed pl-10">
+                      {review.comment}
+                    </p>
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground pl-10">
+                      {new Date(review.createdAt).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
+                    </p>
+                    <Separator className="mt-2" />
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* No reviews fallback */}
+        {(!reviews || reviews.length === 0) && (
+          <Card className="border shadow-sm">
+            <CardContent className="p-6 text-center text-muted-foreground text-sm">
+              No reviews yet for this tutor.
             </CardContent>
           </Card>
         )}

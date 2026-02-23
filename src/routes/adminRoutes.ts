@@ -16,6 +16,10 @@ export const adminRoutes: Route[] = [
         title: "All Bookings",
         url: "/admin-dashboard/all-bookings",
       },
+      {
+        title: "All Reviews",
+        url: "/admin-dashboard/all-reviews",
+      },
     ],
   },
 ];

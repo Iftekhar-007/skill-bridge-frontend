@@ -67,9 +67,8 @@ export default function TutorCard({ tutor }: Props) {
         </div>
 
         <div className="text-sm text-muted-foreground">
-          <span className="font-medium">Available:</span>{" "}
-          {new Date(startTime).toLocaleTimeString()} -{" "}
-          {new Date(endTime).toLocaleTimeString()}
+          <span className="font-medium">Available:</span> {startTime} -{" "}
+          {endTime}
         </div>
       </CardContent>
 

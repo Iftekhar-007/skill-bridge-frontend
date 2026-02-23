@@ -4,6 +4,7 @@ import AboutUs from "@/components/layouts/aboutus/AboutUs";
 import Count from "@/components/layouts/count/Count";
 import { Hero1 } from "@/components/layouts/hero1";
 import Specs from "@/components/layouts/specificationn-cards/specs";
+import FeaturedSection from "@/components/sections/FeaturedSection";
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
       <Specs></Specs>
       <AboutUs></AboutUs>
       <Count></Count>
+      <FeaturedSection />
     </div>
   );
 }

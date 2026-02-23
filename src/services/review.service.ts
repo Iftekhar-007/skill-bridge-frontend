@@ -1,31 +1,46 @@
-// import { env } from "@/env";
-// import { userService } from "./user.service";
+import { env } from "@/env";
+import { cookies } from "next/headers";
+import { Reviews } from "@/types";
+import { userService } from "./user.service";
 
-// const ReviewApi = env.REVIEW_URL;
+const REVIEW_URL = env.REVIEW_URL;
 
-// export const reviewService = {
-//   getMyReviews: async function () {
-//     try {
-//       const { data: session, error } = await userService.getSession();
-//       if (error || !session)
-//         throw new Error(error?.message || "No session found");
+export const ReviewService = {
+  async getAllReviews(): Promise<Reviews[]> {
+    const cookieStore = await cookies();
 
-//       const userId = session.user.id;
+    const res = await fetch(`${REVIEW_URL}/all-reviews`, {
+      headers: {
+        Cookie: cookieStore.toString(),
+      },
+      cache: "no-store",
+    });
 
-//       const res = await fetch(`${ReviewApi}/${userId}`, {
-//         headers: { "Content-Type": "application/json" },
-//         cache: "no-store",
-//       });
+    const result = await res.json();
 
-//       if (!res.ok) throw new Error("Failed to fetch reviews");
+    if (!res.ok) {
+      throw new Error(result.message);
+    }
 
-//       const data = await res.json();
+    return result.data;
+  },
+};
 
-//       return { data: data.data, error: null };
-//     } catch (err: unknown) {
-//       const errorMessage =
-//         err instanceof Error ? err.message : "Something went wrong";
-//       return { data: null, error: { message: errorMessage } };
-//     }
-//   },
-// };
+export const reviewService = {
+  async getTutorReviews(tutorId: string): Promise<Reviews[]> {
+    const { data: session } = await userService.getSession();
+    console.log("session user:", JSON.stringify(session?.user, null, 2));
+
+    const res = await fetch(`${REVIEW_URL}/${tutorId}`, {
+      cache: "no-store",
+    });
+
+    const result = await res.json();
+
+    if (!res.ok) {
+      throw new Error(result.message);
+    }
+
+    return result.data;
+  },
+};
