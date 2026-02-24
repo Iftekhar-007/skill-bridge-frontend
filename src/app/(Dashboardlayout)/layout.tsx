@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import React from "react";
 import { userService } from "@/services/user.service";
 import { Roles } from "@/constants/roles";
+import { redirect } from "next/navigation";
 
 const DashBoardLayout = async ({
   admin,
@@ -19,7 +20,10 @@ const DashBoardLayout = async ({
   tutor: React.ReactNode;
 }) => {
   const { data: session } = await userService.getSession();
-  const userInfo = session.user;
+  const userInfo = session?.user;
+  if (!userInfo) {
+    redirect("/auth/login");
+  }
   let content;
 
   if (userInfo.role === Roles.admin) {

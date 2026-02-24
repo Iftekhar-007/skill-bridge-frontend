@@ -1,13 +1,20 @@
 import { createAuthClient } from "better-auth/react";
-export const authClient = createAuthClient({
-  /* The base URL of the server (optional if you're using the same domain) */
-  baseURL: "https://skill-bridge-backend-pi.vercel.app",
+// export const authClient = createAuthClient({
+//   /* The base URL of the server (optional if you're using the same domain) */
+//   baseURL: "https://skill-bridge-backend-pi.vercel.app",
 
-  user: {
-    additionalFields: {
-      role: {
-        type: "string",
-      },
-    },
+//   user: {
+//     additionalFields: {
+//       role: {
+//         type: "string",
+//       },
+//     },
+//   },
+// });
+
+export const authClient = createAuthClient({
+  baseURL: typeof window !== "undefined" ? window.location.origin : "",
+  fetchOptions: {
+    credentials: "include",
   },
 });
